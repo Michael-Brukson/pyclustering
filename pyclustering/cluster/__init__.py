@@ -684,7 +684,7 @@ class cluster_visualizer:
         plt.close(figure)
 
 
-    def show(self, figure=None, invisible_axis=True, visible_grid=True, display=True, shift=None):
+    def show(self, ax=None, figure=None, invisible_axis=True, visible_grid=True, display=True, shift=None):
         """!
         @brief Shows clusters (visualize) on created or existed figure.
         @details The class is not responsible figures that used for visualization, they should be closed using
@@ -726,11 +726,12 @@ class cluster_visualizer:
             dimension = self.__canvas_dimensions[index_canvas]
             
             #ax = axes[real_index];
-            if (dimension == 1) or (dimension == 2):
-                ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift])
-            else:
-                ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift], projection='3d')
-            
+            if ax is None:
+                if (dimension == 1) or (dimension == 2):
+                    ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift])
+                else:
+                    ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift], projection='3d')
+                
             if len(canvas_data) == 0:
                 plt.setp(ax, visible=False)
             
