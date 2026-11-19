@@ -731,7 +731,12 @@ class cluster_visualizer:
                     ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift])
                 else:
                     ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift], projection='3d')
-                
+            else:
+                if dimension > 2:
+                    target_spec = ax.get_subplotspec()
+                    ax.remove()
+                    ax = cluster_figure.add_subplot(target_spec, projection='3d')
+                    
             if len(canvas_data) == 0:
                 plt.setp(ax, visible=False)
             
@@ -778,20 +783,7 @@ class cluster_visualizer:
         color = cluster_descr.color
         
         for item in cluster:
-            if dimension == 1:
-                if data is None:
-                    ax.plot(item[0], 0.0, color=color, marker=marker, markersize=markersize)
-                else:
-                    ax.plot(data[item][0], 0.0, color=color, marker=marker, markersize=markersize)
-
-            elif dimension == 2:
-                if data is None:
-                    ax.plot(item[0], item[1], color=color, marker=marker, markersize=markersize)
-                else:
-                    ax.plot(data[item][0], data[item][1], color=color, marker=marker, markersize=markersize)
-        
-            elif dimension == 3:
-                if data is None:
-                    ax.scatter(item[0], item[1], item[2], c=color, marker=marker, s=markersize)
-                else:
-                    ax.scatter(data[item][0], data[item][1], data[item][2], c=color, marker=marker, s=markersize)
+            if data is None:
+                ax.plot(*item, 0.0, color=color, marker=marker, markersize=markersize)
+            else:
+                ax.plot(*data[item], 0.0, color=color, marker=marker, markersize=markersize)
